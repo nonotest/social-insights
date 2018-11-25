@@ -16,7 +16,7 @@ type Instagram struct {
 
 // NewInstagram returns a struct with initialised instagram api.
 func NewInstagram(env map[string]string, conf Conf) (*Instagram, error) {
-	insta, err := goinsta.Import("ig-cookie")
+	insta, err := goinsta.Import(env["IG_COOKIE_PATH"])
 	if err != nil {
 		return nil, err
 	}
