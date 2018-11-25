@@ -117,49 +117,17 @@ func (se SheetExporter) getSheet(dataSet models.DataSet) *sheets.Sheet {
 }
 
 func (se SheetExporter) getHeaderRow() *sheets.RowData {
-	cells := make([]*sheets.CellData, 0, 2)
+	headers := []string{"Screen Name", "Followers Count", "Email", "Name", "URL", "Link"}
+	cells := make([]*sheets.CellData, 0, len(headers))
 
-	handleCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "Screen Name",
-		},
+	for _, header := range headers {
+		cell := &sheets.CellData{
+			UserEnteredValue: &sheets.ExtendedValue{
+				StringValue: header,
+			},
+		}
+		cells = append(cells, cell)
 	}
-	cells = append(cells, handleCell)
-
-	countCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "Followers Count",
-		},
-	}
-	cells = append(cells, countCell)
-
-	emailCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "Email",
-		},
-	}
-	cells = append(cells, emailCell)
-
-	nameCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "Name",
-		},
-	}
-	cells = append(cells, nameCell)
-
-	urlCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "URL",
-		},
-	}
-	cells = append(cells, urlCell)
-
-	linkCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "Link",
-		},
-	}
-	cells = append(cells, linkCell)
 
 	return &sheets.RowData{
 		Values: cells,
