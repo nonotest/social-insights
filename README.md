@@ -1,3 +1,10 @@
+Easily export your twitter,instagram... full list of friends/followers.
+Visualise their own count of followers.
+
+We are using a version of this internally at Stocks In Play to build a "social influencer" list.
+
+Initially built because there was no quick way to visualise your full list of twitter followers/friends and their details.
+
 # Disclaimer
 
 This is a random script that served some internal usage.
