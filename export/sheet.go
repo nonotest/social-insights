@@ -66,7 +66,7 @@ func (se SheetExporter) createSheet(srv *sheets.Service, document Document) (*sh
 
 	requests := make([]*sheets.Request, 0, 1)
 	for i, ds := range document.dataSets {
-		r := se.getFitlerView(s.Sheets[i].Properties.SheetId, len(ds.Data))
+		r := se.getFilterView(s.Sheets[i].Properties.SheetId, len(ds.Data))
 		req := &sheets.Request{AddFilterView: r}
 		requests = append(requests, req)
 	}
@@ -139,46 +139,23 @@ func (se SheetExporter) getHeaderRow() *sheets.RowData {
 func (se SheetExporter) getUserRow(u models.User) *sheets.RowData {
 
 	cells := make([]*sheets.CellData, 0, 2)
-	handleCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: u.ScreenName,
-		},
-	}
-	cells = append(cells, handleCell)
 
-	countCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			NumberValue: float64(u.FollowersCount),
-		},
-	}
+	screenNameCell := getTextCell(u.ScreenName)
+	cells = append(cells, screenNameCell)
+
+	countCell := getNumberCell(u.FollowersCount)
 	cells = append(cells, countCell)
 
-	emailCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: u.Email,
-		},
-	}
+	emailCell := getTextCell(u.Email)
 	cells = append(cells, emailCell)
 
-	nameCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: u.Name,
-		},
-	}
+	nameCell := getTextCell(u.Name)
 	cells = append(cells, nameCell)
 
-	urlCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: u.URL,
-		},
-	}
+	urlCell := getTextCell(u.URL)
 	cells = append(cells, urlCell)
 
-	linkCell := &sheets.CellData{
-		UserEnteredValue: &sheets.ExtendedValue{
-			StringValue: "https://twitter.com/" + u.ScreenName,
-		},
-	}
+	linkCell := getTextCell("https://twitter.com/" + u.ScreenName)
 	cells = append(cells, linkCell)
 
 	return &sheets.RowData{
@@ -186,7 +163,7 @@ func (se SheetExporter) getUserRow(u models.User) *sheets.RowData {
 	}
 }
 
-func (se SheetExporter) getFitlerView(sheetID int64, maxRow int) *sheets.AddFilterViewRequest {
+func (se SheetExporter) getFilterView(sheetID int64, maxRow int) *sheets.AddFilterViewRequest {
 	return &sheets.AddFilterViewRequest{
 		Filter: &sheets.FilterView{
 			Title: "Sorted Desc",
@@ -205,6 +182,22 @@ func (se SheetExporter) getFitlerView(sheetID int64, maxRow int) *sheets.AddFilt
 					SortOrder: "DESCENDING",
 				},
 			},
+		},
+	}
+}
+
+func getTextCell(text string) *sheets.CellData {
+	return &sheets.CellData{
+		UserEnteredValue: &sheets.ExtendedValue{
+			StringValue: text,
+		},
+	}
+}
+
+func getNumberCell(number int64) *sheets.CellData {
+	return &sheets.CellData{
+		UserEnteredValue: &sheets.ExtendedValue{
+			NumberValue: float64(number),
 		},
 	}
 }
